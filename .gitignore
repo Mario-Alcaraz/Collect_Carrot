@@ -1,0 +1,11 @@
+# Ignorar archivos generados por Godot
+.import/
+.godot/
+.mono/
+
+# Ignorar archivos de configuración de exportación
+export.cfg
+
+# Ignorar archivos de configuración del usuario
+user/
+
