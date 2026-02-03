@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdfk0udrc32t8"
-path="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"
+uid="uid://cco1yjuhd6gi"
+path="res://.godot/imported/BunnyJump-11.png-41b53f192d5ac968c8d439b7e34b2886.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.png"
-dest_files=["res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"]
+source_file="res://32PixelBunny/PNG/BunnyJump-11.png"
+dest_files=["res://.godot/imported/BunnyJump-11.png-41b53f192d5ac968c8d439b7e34b2886.ctex"]
 
 [params]
 

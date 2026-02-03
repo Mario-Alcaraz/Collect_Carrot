@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdfk0udrc32t8"
-path="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"
+uid="uid://bcke7gb0fx3ct"
+path="res://.godot/imported/BunnySleep-Sheet.png-4a3db72fbbd3cc28694850f99640cd4c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.png"
-dest_files=["res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"]
+source_file="res://32PixelBunny/PNG/BunnySleep-Sheet.png"
+dest_files=["res://.godot/imported/BunnySleep-Sheet.png-4a3db72fbbd3cc28694850f99640cd4c.ctex"]
 
 [params]
 
