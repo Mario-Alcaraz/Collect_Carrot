@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Collect Carrot"
-run/main_scene="uid://be4agm8ylsaba"
+run/main_scene="uid://cmngx8iw06q6u"
 config/features=PackedStringArray("4.6")
 config/icon="res://icon.png"
 
