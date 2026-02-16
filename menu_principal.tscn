@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://csfbj2r1kl2j7"]
+
+[ext_resource type="Texture2D" uid="uid://nd34xv07nv5j" path="res://fondo_menu.png" id="1_bj1uy"]
+[ext_resource type="Script" uid="uid://g5qnfh0h16nf" path="res://menu_principal.gd" id="1_gmcsc"]
+[ext_resource type="AudioStream" uid="uid://dvjukgd4mxt8o" path="res://Musica/menu.wav" id="3_ul6ys"]
+
+[node name="menu_principal" type="Node2D" unique_id=812745016]
+script = ExtResource("1_gmcsc")
+
+[node name="FondoMenu" type="Sprite2D" parent="." unique_id=951996780]
+position = Vector2(959, 542)
+scale = Vector2(1.25, 1.0507814)
+texture = ExtResource("1_bj1uy")
+
+[node name="JUGAR" type="Button" parent="." unique_id=1584533706]
+offset_left = 596.0
+offset_top = 456.0
+offset_right = 1323.0
+offset_bottom = 584.0
+theme_override_font_sizes/font_size = 75
+flat = true
+
+[node name="CONTROLES" type="Button" parent="." unique_id=1433151216]
+offset_left = 592.0
+offset_top = 604.0
+offset_right = 1322.0
+offset_bottom = 735.0
+theme_override_font_sizes/font_size = 75
+flat = true
+
+[node name="SALIR" type="Button" parent="." unique_id=1981428551]
+offset_left = 592.0
+offset_top = 753.0
+offset_right = 1316.0
+offset_bottom = 881.0
+theme_override_font_sizes/font_size = 75
+flat = true
+
+[node name="Menu" type="AudioStreamPlayer2D" parent="." unique_id=1496649597]
+position = Vector2(953, 411)
+stream = ExtResource("3_ul6ys")
+autoplay = true
+
+[connection signal="pressed" from="JUGAR" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="CONTROLES" to="." method="_on_controles_pressed"]
+[connection signal="pressed" from="SALIR" to="." method="_on_salir_pressed"]
