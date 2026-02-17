@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bvophromv611q" path="res://32PixelBunny/PNG/BunnyJump-9.png" id="11_j5n4i"]
 [ext_resource type="Texture2D" uid="uid://crivjq573uf3k" path="res://32PixelBunny/PNG/BunnyJump-10.png" id="12_634y6"]
 [ext_resource type="Texture2D" uid="uid://cco1yjuhd6gi" path="res://32PixelBunny/PNG/BunnyJump-11.png" id="13_efrwb"]
+[ext_resource type="AudioStream" uid="uid://ecg287nfg8i4" path="res://Musica/jump3.wav" id="13_urp6f"]
 [ext_resource type="Texture2D" uid="uid://cibui7ingvp5m" path="res://32PixelBunny/PNG/BunnyJump-12.png" id="14_hiqhm"]
 [ext_resource type="Texture2D" uid="uid://bq4h40vtrg8av" path="res://32PixelBunny/PNG/BunnyJump-13.png" id="15_tkwlq"]
 [ext_resource type="Texture2D" uid="uid://xvm7maeptb1x" path="res://32PixelBunny/PNG/BunnyJump-14.png" id="16_hl5qd"]
@@ -32,7 +33,8 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
+		$Jump3.playing = true
+		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
@@ -276,3 +278,7 @@ sprite_frames = SubResource("SpriteFrames_s7jk6")
 animation = &"Dead"
 frame = 8
 frame_progress = 1.0
+
+[node name="Jump3" type="AudioStreamPlayer2D" parent="." unique_id=1866972966]
+position = Vector2(11, 8)
+stream = ExtResource("13_urp6f")

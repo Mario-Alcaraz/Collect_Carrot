@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://ggsc74274dqo"]
+
+[ext_resource type="Script" uid="uid://t26vq614l457" path="res://menu_controles.gd" id="1_sxc85"]
+[ext_resource type="Texture2D" uid="uid://k4tfcrrueo68" path="res://fondo_menu_controles.png" id="3_368cw"]
+[ext_resource type="AudioStream" uid="uid://cbu5coo6h7ola" path="res://Musica/menu_controles.wav" id="3_dtnhc"]
+
+[node name="Node2D" type="Node2D" unique_id=149571483]
+script = ExtResource("1_sxc85")
+
+[node name="Button" type="Button" parent="." unique_id=422028755]
+offset_left = 46.0
+offset_top = 43.0
+offset_right = 488.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 75
+flat = true
+
+[node name="MenuControles" type="AudioStreamPlayer2D" parent="." unique_id=702551326]
+position = Vector2(946, 125)
+stream = ExtResource("3_dtnhc")
+autoplay = true
+
+[node name="FondoMenuControles" type="Sprite2D" parent="." unique_id=399572262]
+position = Vector2(961.5, 542.5)
+scale = Vector2(1.2506511, 1.0537109)
+texture = ExtResource("3_368cw")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
