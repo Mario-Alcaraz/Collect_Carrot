@@ -7,6 +7,31 @@
 [ext_resource type="Texture2D" uid="uid://5e134lkdj87s" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-5.png" id="5_iiiqj"]
 [ext_resource type="Texture2D" uid="uid://dcinwnywafkab" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-6.png" id="6_jadge"]
 
+[sub_resource type="GDScript" id="GDScript_yjs22"]
+script/source = "extends CharacterBody2D
+
+const CorrerZorro = 90
+const Gravedad = 98
+
+func _ready():
+	velocity.x = CorrerZorro
+	$AnimatedSprite2D.play(\"Run\")
+
+func _physics_process(delta):
+	velocity.y += Gravedad
+	
+	if is_on_wall():
+		velocity.x = -velocity.x
+	
+	# Ajustar dirección del sprite
+	if velocity.x < 0:
+		$AnimatedSprite2D.flip_h = true
+	elif velocity.x > 0:
+		$AnimatedSprite2D.flip_h = false
+
+	move_and_slide()
+"
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_fdy37"]
 animations = [{
 "frames": [{
@@ -29,7 +54,7 @@ animations = [{
 "texture": ExtResource("6_jadge")
 }],
 "loop": true,
-"name": &"default",
+"name": &"Run",
 "speed": 12.0
 }]
 
@@ -37,18 +62,22 @@ animations = [{
 size = Vector2(20, 23)
 
 [node name="Zorro" type="CharacterBody2D" unique_id=1816901796]
+script = SubResource("GDScript_yjs22")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=993195344]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_fdy37")
-frame_progress = 0.10376946
+animation = &"Run"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1774057759]
 position = Vector2(-1, 4.5)
 shape = SubResource("RectangleShape2D_yjs22")
 
 [node name="Rayo" type="Node2D" parent="." unique_id=1790496012]
+visible = false
 
 [node name="Rayo1" type="RayCast2D" parent="Rayo" unique_id=938313515]
+target_position = Vector2(60, 0)
 
 [node name="Rayo2" type="RayCast2D" parent="Rayo" unique_id=457650661]
+target_position = Vector2(-60, 0)

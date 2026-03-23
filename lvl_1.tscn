@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bm8j1qy0sbenj" path="res://Nature_environment_01.png" id="2_clg6b"]
 [ext_resource type="PackedScene" uid="uid://be4agm8ylsaba" path="res://player.tscn" id="3_t6wp4"]
 [ext_resource type="AudioStream" uid="uid://hosym7v4o7ao" path="res://Musica/level1.wav" id="4_bcbm8"]
+[ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="5_clg6b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_okdh5"]
 texture = ExtResource("2_clg6b")
@@ -1439,6 +1440,9 @@ modulate = Color(0.37254903, 0.8039216, 0.89411765, 1)
 position = Vector2(1256.5, 329.50003)
 scale = Vector2(2575, 1557)
 texture = SubResource("CanvasTexture_okdh5")
+
+[node name="Zorro" parent="." unique_id=1816901796 instance=ExtResource("5_clg6b")]
+position = Vector2(610, -33)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]
