@@ -1363,13 +1363,13 @@ texture = ExtResource("2_clg6b")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_okdh5")
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_okdh5"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7jktm"]
 size = Vector2(16.5, 67.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feb5d"]
 size = Vector2(94, 12)
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_okdh5"]
 
 [node name="lvl_1" type="Node2D" unique_id=2021419277]
 script = ExtResource("1_okdh5")
@@ -1389,6 +1389,25 @@ position = Vector2(226, 20)
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=904600074]
 position = Vector2(68, -21)
 zoom = Vector2(4, 4)
+
+[node name="Level1" type="AudioStreamPlayer2D" parent="." unique_id=1802900313]
+position = Vector2(1294, -100)
+stream = ExtResource("4_bcbm8")
+autoplay = true
+max_distance = 100000.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1504072790]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer" unique_id=2013828004]
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/ParallaxBackground" unique_id=1160084411]
+modulate = Color(0.37254903, 0.8039216, 0.89411765, 1)
+position = Vector2(1256.5, 329.50003)
+scale = Vector2(2575, 1557)
+texture = SubResource("CanvasTexture_okdh5")
+
+[node name="Zorro" parent="." unique_id=1816901796 instance=ExtResource("5_clg6b")]
+position = Vector2(610, -33)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=662772873]
 position = Vector2(2264, -29)
@@ -1424,25 +1443,6 @@ position = Vector2(395, 37)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D5" unique_id=478399356]
 position = Vector2(37, 4)
 shape = SubResource("RectangleShape2D_feb5d")
-
-[node name="Level1" type="AudioStreamPlayer2D" parent="." unique_id=1802900313]
-position = Vector2(1294, -100)
-stream = ExtResource("4_bcbm8")
-autoplay = true
-max_distance = 100000.0
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1504072790]
-
-[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer" unique_id=2013828004]
-
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/ParallaxBackground" unique_id=1160084411]
-modulate = Color(0.37254903, 0.8039216, 0.89411765, 1)
-position = Vector2(1256.5, 329.50003)
-scale = Vector2(2575, 1557)
-texture = SubResource("CanvasTexture_okdh5")
-
-[node name="Zorro" parent="." unique_id=1816901796 instance=ExtResource("5_clg6b")]
-position = Vector2(610, -33)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]

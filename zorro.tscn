@@ -12,22 +12,26 @@ script/source = "extends CharacterBody2D
 
 const CorrerZorro = 90
 const Gravedad = 98
+@onready var ray_suelo: RayCast2D = $Floor
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready():
 	velocity.x = CorrerZorro
 	$AnimatedSprite2D.play(\"Run\")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	velocity.y += Gravedad
-	
-	if is_on_wall():
-		velocity.x = -velocity.x
 	
 	# Ajustar dirección del sprite
 	if velocity.x < 0:
-		$AnimatedSprite2D.flip_h = true
+		sprite.flip_h = true
+		ray_suelo.position.x = -8
 	elif velocity.x > 0:
-		$AnimatedSprite2D.flip_h = false
+		sprite.flip_h = false
+		ray_suelo.position.x = 8
+
+	if is_on_wall() or !ray_suelo.is_colliding():
+		velocity.x *= -1
 
 	move_and_slide()
 "
@@ -74,10 +78,15 @@ position = Vector2(-1, 4.5)
 shape = SubResource("RectangleShape2D_yjs22")
 
 [node name="Rayo" type="Node2D" parent="." unique_id=1790496012]
-visible = false
 
 [node name="Rayo1" type="RayCast2D" parent="Rayo" unique_id=938313515]
-target_position = Vector2(60, 0)
+position = Vector2(0, 5)
+target_position = Vector2(29, 0)
 
 [node name="Rayo2" type="RayCast2D" parent="Rayo" unique_id=457650661]
-target_position = Vector2(-60, 0)
+position = Vector2(0, 5)
+target_position = Vector2(-32, 0)
+
+[node name="Floor" type="RayCast2D" parent="." unique_id=734303203]
+position = Vector2(-11, -7)
+target_position = Vector2(0, 35)

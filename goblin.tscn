@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://8cunxeuxyn5e"]
+
+[ext_resource type="Texture2D" uid="uid://sjopqcrr1mic" path="res://Monsters_Creatures_Fantasy/Monsters_Creatures_Fantasy/Goblin/Run.png" id="1_dl46o"]
+
+[sub_resource type="GDScript" id="GDScript_yjs22"]
+script/source = "extends CharacterBody2D
+
+const CorrerZorro = 90
+const Gravedad = 98
+@onready var ray_suelo: RayCast2D = $Floor
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+
+func _ready():
+	velocity.x = CorrerZorro
+	$AnimatedSprite2D.play(\"Run\")
+
+func _physics_process(_delta):
+	velocity.y += Gravedad
+	
+	# Ajustar dirección del sprite
+	if velocity.x < 0:
+		sprite.flip_h = true
+		ray_suelo.position.x = -8
+	elif velocity.x > 0:
+		sprite.flip_h = false
+		ray_suelo.position.x = 8
+
+	if is_on_wall() or !ray_suelo.is_colliding():
+		velocity.x *= -1
+
+	move_and_slide()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6mjv"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vu5tg"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_macxp"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eyhpr"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utad2"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3s2j4"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(750, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6nebt"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(900, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ixvp6"]
+atlas = ExtResource("1_dl46o")
+region = Rect2(1050, 0, 150, 150)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fdy37"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6mjv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vu5tg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_macxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eyhpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_utad2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3s2j4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6nebt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ixvp6")
+}],
+"loop": true,
+"name": &"Run",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yjs22"]
+size = Vector2(38, 38)
+
+[node name="Goblin" type="CharacterBody2D" unique_id=1816901796]
+script = SubResource("GDScript_yjs22")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=993195344]
+texture_filter = 1
+position = Vector2(0, 1)
+sprite_frames = SubResource("SpriteFrames_fdy37")
+animation = &"Run"
+frame_progress = 0.18187144
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1774057759]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_yjs22")
+
+[node name="Rayo" type="Node2D" parent="." unique_id=1790496012]
+
+[node name="Rayo1" type="RayCast2D" parent="Rayo" unique_id=938313515]
+position = Vector2(0, 5)
+target_position = Vector2(46, 0)
+
+[node name="Rayo2" type="RayCast2D" parent="Rayo" unique_id=457650661]
+position = Vector2(0, 5)
+target_position = Vector2(-51, 0)
+
+[node name="Floor" type="RayCast2D" parent="." unique_id=734303203]
+position = Vector2(-11, -7)
+target_position = Vector2(0, 55)
