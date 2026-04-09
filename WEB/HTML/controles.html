@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Collect Carrot — Controles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 7rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .section-title {
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: .85rem;
+      color: rgba(255,248,231,.5);
+      margin-bottom: 3.5rem;
+      font-weight: 600;
+    }
+
+    .controls-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      max-width: 860px;
+      margin: 0 auto 4rem;
+    }
+
+    .control-card {
+      background: rgba(255,248,231,.04);
+      border: 2px solid var(--orange-dark);
+      padding: 2rem 1.5rem;
+      flex: 1;
+      min-width: 150px;
+      max-width: 200px;
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+
+    .control-card:hover {
+      border-color: var(--orange);
+      background: rgba(255,107,26,.1);
+      transform: translateY(-4px);
+    }
+
+    .key-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .key {
+      font-family: 'Press Start 2P', monospace;
+      font-size: .75rem;
+      background: var(--orange-dark);
+      color: var(--yellow);
+      display: inline-block;
+      padding: .45rem .75rem;
+      border-bottom: 4px solid rgba(0,0,0,.45);
+      letter-spacing: .05em;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .key-sep {
+      font-family: 'Press Start 2P', monospace;
+      font-size: .4rem;
+      color: rgba(255,248,231,.3);
+    }
+
+    .control-icon {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: .8rem;
+    }
+
+    .control-label {
+      font-size: .95rem;
+      font-weight: 800;
+      color: var(--cream);
+      margin-bottom: .4rem;
+    }
+
+    .control-desc {
+      font-size: .8rem;
+      color: rgba(255,248,231,.45);
+      line-height: 1.5;
+    }
+
+    /* Keyboard diagram */
+    .keyboard-diagram {
+      max-width: 520px;
+      margin: 0 auto 3rem;
+      background: rgba(255,248,231,.04);
+      border: 2px solid var(--orange-dark);
+      padding: 2rem;
+    }
+
+    .kb-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: .5rem;
+      color: rgba(255,248,231,.4);
+      margin-bottom: 1.5rem;
+      letter-spacing: .1em;
+    }
+
+    .kb-row {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: .5rem;
+    }
+
+    .kb-key {
+      font-family: 'Press Start 2P', monospace;
+      font-size: .5rem;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,248,231,.06);
+      border: 1.5px solid rgba(255,107,26,.3);
+      color: rgba(255,248,231,.3);
+      transition: all .15s;
+    }
+
+    .kb-key.active {
+      background: rgba(255,107,26,.25);
+      border-color: var(--orange);
+      color: var(--orange-light);
+      text-shadow: 0 0 8px rgba(255,107,26,.5);
+    }
+
+    .kb-key.space {
+      width: 180px;
+      font-size: .4rem;
+      letter-spacing: .1em;
+    }
+
+    .kb-arrow {
+      font-size: .8rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html" class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <rect x="7" y="8" width="8" height="10" rx="1" fill="#FF6B1A"/>
+        <rect x="9" y="6" width="4" height="4" rx="1" fill="#FF9A52"/>
+        <rect x="8" y="2" width="2" height="6" rx="1" fill="#3DBA4E"/>
+        <rect x="11" y="1" width="2" height="5" rx="1" fill="#3DBA4E"/>
+        <rect x="5" y="3" width="2" height="5" rx="1" fill="#2A8A38"/>
+      </svg>
+      COLLECT CARROT
+    </a>
+    <ul>
+      <li><a href="../index.html">Inicio</a></li>
+      <li><a href="controles.html" class="active">Controles</a></li>
+      <li><a href="proyecto.html">Proyecto</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <h1 class="section-title">CONTROLES</h1>
+    <p class="subtitle">Domina cada movimiento para recolectar todas las zanahorias</p>
+
+    <div class="controls-grid">
+
+      <div class="control-card">
+        <span class="control-icon">⬅️</span>
+        <div class="key-wrap">
+          <span class="key">A</span>
+          <span class="key-sep">/</span>
+          <span class="key">←</span>
+        </div>
+        <p class="control-label">Mover izquierda</p>
+        <p class="control-desc">Desplázate hacia la izquierda</p>
+      </div>
+
+      <div class="control-card">
+        <span class="control-icon">➡️</span>
+        <div class="key-wrap">
+          <span class="key">D</span>
+          <span class="key-sep">/</span>
+          <span class="key">→</span>
+        </div>
+        <p class="control-label">Mover derecha</p>
+        <p class="control-desc">Desplázate hacia la derecha</p>
+      </div>
+
+      <div class="control-card">
+        <span class="control-icon">🦘</span>
+        <div class="key-wrap">
+          <span class="key space" style="width:auto; padding:.45rem 1rem;">ESPACIO</span>
+        </div>
+        <p class="control-label">Saltar</p>
+        <p class="control-desc">Salta entre plataformas</p>
+      </div>
+
+      <div class="control-card">
+        <span class="control-icon">⚔️</span>
+        <div class="key-wrap">
+          <span class="key">E</span>
+        </div>
+        <p class="control-label">Atacar</p>
+        <p class="control-desc">Golpea a los enemigos cercanos</p>
+      </div>
+
+    </div>
+
+    <!-- Visual keyboard -->
+    <div class="keyboard-diagram">
+      <p class="kb-title">DISPOSICIÓN DEL TECLADO</p>
+
+      <div class="kb-row">
+        <div class="kb-key"></div>
+        <div class="kb-key active">A</div>
+        <div class="kb-key active">D</div>
+        <div class="kb-key"></div>
+        <div class="kb-key active">E</div>
+      </div>
+
+      <div class="kb-row" style="margin-top: .8rem;">
+        <div class="kb-key space active">BARRA ESPACIADORA</div>
+      </div>
+
+      <div class="kb-row" style="margin-top: .8rem;">
+        <div class="kb-key"></div>
+        <div class="kb-key active"><span class="kb-arrow">←</span></div>
+        <div class="kb-key active"><span class="kb-arrow">→</span></div>
+        <div class="kb-key"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    COLLECT CARROT &mdash; PROYECTO DE RECERCA &mdash; DESARROLLADO EN GODOT ENGINE
+  </footer>
+</body>
+</html>
