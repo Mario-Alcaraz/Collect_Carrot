@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://be4agm8ylsaba"]
 
+[ext_resource type="Texture2D" uid="uid://dnpbvb2agj3ok" path="res://32PixelBunny/PNG/BunnyAttack-Sheet.png" id="1_bwjto"]
 [ext_resource type="Texture2D" uid="uid://codi0v8lsbw4i" path="res://32PixelBunny/PNG/BunnyDead-Sheet.png" id="1_ivps1"]
 [ext_resource type="Texture2D" uid="uid://wkhj3w0f2p0x" path="res://32PixelBunny/PNG/BunnyIdle-Sheet.png" id="1_pbfsw"]
 [ext_resource type="Texture2D" uid="uid://7j2ockq633hd" path="res://32PixelBunny/PNG/BunnyJump-7.png" id="9_2wuci"]
@@ -17,46 +18,98 @@
 [sub_resource type="GDScript" id="GDScript_pbfsw"]
 script/source = "extends CharacterBody2D
 
-
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 
+var attacking = false
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	# 1. GRAVEDAD SIEMPRE (Esto evita que el personaje vuele o flote)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+
+	# 2. ATAQUE (Solo en el suelo y si no está ya atacando)
+	if Input.is_action_just_pressed(\"Attack\") and is_on_floor() and not attacking:
+		attacking = true
+		# AJUSTE DE EQUILIBRIO: Mueve el dibujo un poco arriba para compensar el hundimiento
+		# Prueba con -5. Si se hunde, pon -7. Si flota, pon -3.
+		$AnimatedSprite2D.position.y = -5 
+		$AnimatedSprite2D.play(\"Atacar\")
+
+	# 3. SI ESTÁ ATACANDO: BLOQUEO DE MOVIMIENTO
+	if attacking:
+		velocity.x = 0
+		move_and_slide()
+		return # Salimos para que no ejecute el código de caminar/saltar
+
+	# 4. SALTO
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		if has_node(\"Jump3\"):
+			$Jump3.playing = true
+
+	# 5. MOVIMIENTO Y GIRO
+	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	
+	if direction > 0:
+		$AnimatedSprite2D.flip_h = false
+	elif direction < 0:
+		$AnimatedSprite2D.flip_h = true
+
+	# 6. LÓGICA DE ANIMACIONES (Caminar / Idle / Aire)
+	if is_on_floor():
+		if direction:
+			velocity.x = direction * SPEED
+			$AnimatedSprite2D.play(\"Run\")
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+			$AnimatedSprite2D.play(\"Idle\")
+	else:
 		if velocity.y < 0:
 			$AnimatedSprite2D.play(\"Jump\")
 		else:
 			$AnimatedSprite2D.play(\"Fall\")
-	# Handle jump.
-	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		$Jump3.playing = true
-		
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	
-	if direction > 0:
-		$AnimatedSprite2D.scale.x = 1
-	elif direction < 0:
-		$AnimatedSprite2D.scale.x = -1
-	if direction:
-		velocity.x = direction * SPEED
-		if is_on_floor():
-			$AnimatedSprite2D.play(\"Run\")
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		if is_on_floor():
-			$AnimatedSprite2D.play(\"Idle\")
 
 	move_and_slide()
+
+# 7. RESET AL TERMINAR LA ANIMACIÓN
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if $AnimatedSprite2D.animation == \"Atacar\":
+		attacking = false
+		# DEVOLVEMOS EL DIBUJO AL PUNTO MEDIO
+		$AnimatedSprite2D.position.y = 0
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
 size = Vector2(18, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5n4i"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_634y6"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efrwb"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hiqhm"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkwlq"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl5qd"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ek41f"]
+atlas = ExtResource("1_bwjto")
+region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_urp6f"]
 atlas = ExtResource("1_ivps1")
@@ -148,6 +201,32 @@ region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_s7jk6"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5n4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_634y6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_efrwb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hiqhm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkwlq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl5qd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ek41f")
+}],
+"loop": false,
+"name": &"Atacar",
+"speed": 14.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_urp6f")
@@ -275,10 +354,10 @@ shape = SubResource("RectangleShape2D_q13i1")
 texture_filter = 1
 scale = Vector2(1, 0.96875)
 sprite_frames = SubResource("SpriteFrames_s7jk6")
-animation = &"Dead"
-frame = 8
-frame_progress = 1.0
+animation = &"Atacar"
 
 [node name="Jump3" type="AudioStreamPlayer2D" parent="." unique_id=1866972966]
 position = Vector2(11, 8)
 stream = ExtResource("13_urp6f")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
