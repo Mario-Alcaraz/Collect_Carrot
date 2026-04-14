@@ -24,45 +24,49 @@ const JUMP_VELOCITY = -400.0
 var attacking = false
 
 func _physics_process(delta: float) -> void:
-	# 1. GRAVEDAD SIEMPRE (Esto evita que el personaje vuele o flote)
+	# 1. GRAVEDAD SIEMPRE
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# 2. ATAQUE (Solo en el suelo y si no está ya atacando)
+	# 2. GIRAR EL PERSONAJE (Solo si no ataca)
+	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	if not attacking:
+		if direction > 0:
+			$AnimatedSprite2D.flip_h = false
+		elif direction < 0:
+			$AnimatedSprite2D.flip_h = true
+
+	# 3. ATAQUE (SOLO EN EL SUELO)
 	if Input.is_action_just_pressed(\"Attack\") and is_on_floor() and not attacking:
 		attacking = true
-		# AJUSTE DE EQUILIBRIO: Mueve el dibujo un poco arriba para compensar el hundimiento
-		# Prueba con -5. Si se hunde, pon -7. Si flota, pon -3.
-		$AnimatedSprite2D.position.y = -5 
+		
+		# --- AJUSTE REALISTA ---
+		# Bajamos el valor. Si con -8 volaba, prueba con -3 o -4.
+		# Esto es solo para compensar el tamaño del dibujo de ataque.
+		$AnimatedSprite2D.offset.y = -4 
+		
 		$AnimatedSprite2D.play(\"Atacar\")
 
-	# 3. SI ESTÁ ATACANDO: BLOQUEO DE MOVIMIENTO
+	# 4. SI ATACA, SE QUEDA CLAVADO
 	if attacking:
 		velocity.x = 0
 		move_and_slide()
-		return # Salimos para que no ejecute el código de caminar/saltar
+		return
 
-	# 4. SALTO
+	# 5. SALTO Y CAMINAR
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-		if has_node(\"Jump3\"):
-			$Jump3.playing = true
 
-	# 5. MOVIMIENTO Y GIRO
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	
-	if direction > 0:
-		$AnimatedSprite2D.flip_h = false
-	elif direction < 0:
-		$AnimatedSprite2D.flip_h = true
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# 6. LÓGICA DE ANIMACIONES (Caminar / Idle / Aire)
+	# 6. ANIMACIONES NORMALES
 	if is_on_floor():
-		if direction:
-			velocity.x = direction * SPEED
+		if direction != 0:
 			$AnimatedSprite2D.play(\"Run\")
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
 			$AnimatedSprite2D.play(\"Idle\")
 	else:
 		if velocity.y < 0:
@@ -72,12 +76,11 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-# 7. RESET AL TERMINAR LA ANIMACIÓN
+# 7. SEÑAL DE FIN DE ANIMACIÓN
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if $AnimatedSprite2D.animation == \"Atacar\":
 		attacking = false
-		# DEVOLVEMOS EL DIBUJO AL PUNTO MEDIO
-		$AnimatedSprite2D.position.y = 0
+		$AnimatedSprite2D.offset.y = 0 # Vuelve al suelo exacto del Idle
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
