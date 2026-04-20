@@ -19,6 +19,10 @@ run/main_scene="uid://csfbj2r1kl2j7"
 config/features=PackedStringArray("4.6")
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*uid://4376600qm74s"
+
 [display]
 
 window/size/viewport_width=1920
