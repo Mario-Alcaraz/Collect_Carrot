@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b3h7clvluhdb7"]
+
+[ext_resource type="Script" uid="uid://dfg4po7d2d6xi" path="res://hud.gd" id="1_64ctp"]
+[ext_resource type="Texture2D" uid="uid://b1uf5si4jtava" path="res://Zanahoria/ezgif-split/frame_0_delay-0.17s.png" id="2_8sq4i"]
+
+[node name="HUD" type="CanvasLayer" unique_id=176770981]
+script = ExtResource("1_64ctp")
+
+[node name="Contador" type="Control" parent="." unique_id=41671931]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="Contador" unique_id=49590356]
+texture_filter = 1
+layout_mode = 0
+offset_left = -15.0
+offset_right = 40.0
+offset_bottom = 70.0
+texture = ExtResource("2_8sq4i")
+
+[node name="Label" type="Label" parent="Contador" unique_id=1777573839]
+layout_mode = 0
+offset_left = -14.0
+offset_right = 40.0
+offset_bottom = 32.0
+text = "0"

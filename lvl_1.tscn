@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://hosym7v4o7ao" path="res://Musica/level1.wav" id="4_bcbm8"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="5_clg6b"]
 [ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="6_t6wp4"]
+[ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="7_bcbm8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_okdh5"]
 texture = ExtResource("2_clg6b")
@@ -1447,6 +1448,10 @@ shape = SubResource("RectangleShape2D_feb5d")
 
 [node name="Area2D6" parent="." unique_id=80993008 instance=ExtResource("6_t6wp4")]
 position = Vector2(292, 10)
+
+[node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_bcbm8")]
+
+[node name="HUD2" parent="." unique_id=1368322046 instance=ExtResource("7_bcbm8")]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]
