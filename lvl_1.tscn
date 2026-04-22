@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://be4agm8ylsaba" path="res://player.tscn" id="3_t6wp4"]
 [ext_resource type="AudioStream" uid="uid://hosym7v4o7ao" path="res://Musica/level1.wav" id="4_bcbm8"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="5_clg6b"]
+[ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="6_31jyx"]
 [ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="6_t6wp4"]
 [ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="7_bcbm8"]
 
@@ -1424,6 +1425,8 @@ position = Vector2(1883, 21)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2" unique_id=352904568]
 position = Vector2(37, 4)
 shape = SubResource("RectangleShape2D_feb5d")
+
+[node name="HUD_Vidas" parent="Area2D2" unique_id=53302477 instance=ExtResource("6_31jyx")]
 
 [node name="Area2D3" type="Area2D" parent="." unique_id=1514291841]
 position = Vector2(1643, -27)

@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cbx2wxe3oy1ua"]
+
+[ext_resource type="Script" uid="uid://d2t1645ycmdu7" path="res://hud_vidas.gd" id="1_en6e6"]
+[ext_resource type="Texture2D" uid="uid://lx74phvyd45o" path="res://Corazon/Corazon.png" id="2_7sa1o"]
+
+[node name="HUD_Vidas" type="CanvasLayer" unique_id=53302477]
+script = ExtResource("1_en6e6")
+
+[node name="Control" type="Control" parent="." unique_id=1673845383]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=446578527]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -1140.0
+offset_right = 778.0
+offset_bottom = -610.0
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control/HBoxContainer" unique_id=471617427]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("2_7sa1o")
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Control/HBoxContainer" unique_id=508343036]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("2_7sa1o")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="Control/HBoxContainer" unique_id=1358495200]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("2_7sa1o")
+expand_mode = 1
+stretch_mode = 5
