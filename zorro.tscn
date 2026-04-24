@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://db73u2b3okc20"]
 
+[ext_resource type="Texture2D" uid="uid://ca1n16c08ewik" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/idle/player-idle-1.png" id="1_dcv8m"]
 [ext_resource type="Texture2D" uid="uid://y03sura46os" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-1.png" id="1_yjs22"]
+[ext_resource type="Texture2D" uid="uid://dlkr3le1mber3" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/crouch/player-crouch-1.png" id="2_iiiqj"]
 [ext_resource type="Texture2D" uid="uid://ba3vbcggysn0q" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-2.png" id="2_mcu62"]
 [ext_resource type="Texture2D" uid="uid://c1nbg78ot18x8" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-3.png" id="3_cgncp"]
+[ext_resource type="Texture2D" uid="uid://c1jww1gv14ipj" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/crouch/player-crouch-2.png" id="3_jadge"]
 [ext_resource type="Texture2D" uid="uid://dst1nv2tpbtnp" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-4.png" id="4_dcv8m"]
 [ext_resource type="Texture2D" uid="uid://5e134lkdj87s" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-5.png" id="5_iiiqj"]
 [ext_resource type="Texture2D" uid="uid://dcinwnywafkab" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-6.png" id="6_jadge"]
@@ -10,34 +13,81 @@
 [sub_resource type="GDScript" id="GDScript_yjs22"]
 script/source = "extends CharacterBody2D
 
-const CorrerZorro = 90
+const CorrerZorro = 110 # Un poco más rápido para que sea difícil
 const Gravedad = 98
 @onready var ray_suelo: RayCast2D = $Floor
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+var esta_atacando = false
+
 func _ready():
 	velocity.x = CorrerZorro
-	$AnimatedSprite2D.play(\"Run\")
+	sprite.play(\"Run\")
 
 func _physics_process(_delta):
-	velocity.y += Gravedad
-	
-	# Ajustar dirección del sprite
-	if velocity.x < 0:
-		sprite.flip_h = true
-		ray_suelo.position.x = -8
-	elif velocity.x > 0:
-		sprite.flip_h = false
-		ray_suelo.position.x = 8
+	if esta_atacando:
+		velocity.x = 0
+	else:
+		velocity.y += Gravedad
+		
+		# Girar sprite y raycast
+		if velocity.x < 0:
+			sprite.flip_h = true
+			ray_suelo.position.x = -8
+		elif velocity.x > 0:
+			sprite.flip_h = false
+			ray_suelo.position.x = 8
 
-	if is_on_wall() or !ray_suelo.is_colliding():
-		velocity.x *= -1
+		# Si llega a un borde o pared, se da la vuelta
+		if is_on_wall() or !ray_suelo.is_colliding():
+			velocity.x *= -1
 
 	move_and_slide()
+
+# Esta es la función que detecta al conejo antes de chocar físicamente
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\") and not esta_atacando:
+		esta_atacando = true
+		sprite.play(\"Atacar\")
+		
+		Global.salud_actual -= 1 # Quita medio corazón
+		
+		if Global.salud_actual <= 0:
+			get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
+		
+		await sprite.animation_finished
+		esta_atacando = false
+		sprite.play(\"Run\")
 "
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fdy37"]
+atlas = ExtResource("1_dcv8m")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ekvc"]
+atlas = ExtResource("2_iiiqj")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02o3e"]
+atlas = ExtResource("3_jadge")
+region = Rect2(0, 0, 33, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fdy37"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fdy37")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ekvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02o3e")
+}],
+"loop": true,
+"name": &"Atacar",
+"speed": 12.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_yjs22")
@@ -63,7 +113,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yjs22"]
-size = Vector2(20, 23)
+size = Vector2(23, 23)
 
 [node name="Zorro" type="CharacterBody2D" unique_id=1816901796]
 script = SubResource("GDScript_yjs22")
@@ -71,10 +121,11 @@ script = SubResource("GDScript_yjs22")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=993195344]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_fdy37")
-animation = &"Run"
+animation = &"Atacar"
+frame_progress = 0.5955158
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1774057759]
-position = Vector2(-1, 4.5)
+position = Vector2(0.5, 4.5)
 shape = SubResource("RectangleShape2D_yjs22")
 
 [node name="Rayo" type="Node2D" parent="." unique_id=1790496012]
