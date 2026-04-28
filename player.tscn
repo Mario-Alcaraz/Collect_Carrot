@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dnpbvb2agj3ok" path="res://32PixelBunny/PNG/BunnyAttack-Sheet.png" id="1_bwjto"]
 [ext_resource type="Texture2D" uid="uid://codi0v8lsbw4i" path="res://32PixelBunny/PNG/BunnyDead-Sheet.png" id="1_ivps1"]
 [ext_resource type="Texture2D" uid="uid://wkhj3w0f2p0x" path="res://32PixelBunny/PNG/BunnyIdle-Sheet.png" id="1_pbfsw"]
+[ext_resource type="Texture2D" uid="uid://cc0unxyuc5ub8" path="res://32PixelBunny/PNG/BunnyHurt-Sheet.png" id="2_606se"]
 [ext_resource type="Texture2D" uid="uid://7j2ockq633hd" path="res://32PixelBunny/PNG/BunnyJump-7.png" id="9_2wuci"]
 [ext_resource type="Texture2D" uid="uid://d35ewsj7baacd" path="res://32PixelBunny/PNG/BunnyJump-8.png" id="10_iruf7"]
 [ext_resource type="Texture2D" uid="uid://bvophromv611q" path="res://32PixelBunny/PNG/BunnyJump-9.png" id="11_j5n4i"]
@@ -21,6 +22,7 @@ script/source = "extends CharacterBody2D
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 var attacking = false
+var recibiendo_daño = false # Control para la animación de daño
 
 func _ready() -> void:
 	add_to_group(\"player\")
@@ -29,13 +31,21 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
+	# Si está sufriendo daño, bloqueamos el control y solo aplicamos física básica
+	if recibiendo_daño:
+		move_and_slide()
+		return
+
 	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	
+	# Girar el sprite
 	if not attacking:
 		if direction > 0:
 			$AnimatedSprite2D.flip_h = false
 		elif direction < 0:
 			$AnimatedSprite2D.flip_h = true
 
+	# Lógica de Ataque
 	if Input.is_action_just_pressed(\"Attack\") and is_on_floor() and not attacking:
 		attacking = true
 		$AnimatedSprite2D.offset.y = -4 
@@ -45,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0
 		move_and_slide()
 		
-		# GOLPEAR AL ZORRO
+		# Detectar colisión con enemigos durante el ataque
 		for i in get_slide_collision_count():
 			var colision = get_slide_collision(i)
 			var objeto = colision.get_collider()
@@ -53,28 +63,58 @@ func _physics_process(delta: float) -> void:
 				objeto.morir()
 		return
 
+	# Lógica de Salto
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
+	# Movimiento horizontal
 	if direction:
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# Animaciones
+	# Lógica de Animaciones normales
 	if is_on_floor():
-		if direction != 0: $AnimatedSprite2D.play(\"Run\")
-		else: $AnimatedSprite2D.play(\"Idle\")
+		if direction != 0: 
+			$AnimatedSprite2D.play(\"Run\")
+		else: 
+			$AnimatedSprite2D.play(\"Idle\")
 	else:
-		if velocity.y < 0: $AnimatedSprite2D.play(\"Jump\")
-		else: $AnimatedSprite2D.play(\"Fall\")
+		if velocity.y < 0: 
+			$AnimatedSprite2D.play(\"Jump\")
+		else: 
+			$AnimatedSprite2D.play(\"Fall\")
 
 	move_and_slide()
 
+# --- FUNCIÓN DE DAÑO (Activada por el Global) ---
+func recibir_daño():
+	if recibiendo_daño: return # Evita que la animación se reinicie en bucle
+	
+	recibiendo_daño = true
+	attacking = false # Interrumpe el ataque si lo estaban golpeando
+	
+	# Reproduce la animación (Asegúrate que el nombre en el editor es Daño)
+	$AnimatedSprite2D.play(\"Daño\") 
+	
+	# Pequeño salto/retroceso de impacto
+	velocity.y = -180 
+	velocity.x = -150 if not $AnimatedSprite2D.flip_h else 150
+	
+	# Si la vida llega a cero tras el cambio, vamos al menú de muerte
+	if Global.salud_actual <= 0:
+		get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
+
+# --- CONEXIÓN DE SEÑALES ---
 func _on_animated_sprite_2d_animation_finished() -> void:
+	# Al terminar de atacar, reseteamos el offset
 	if $AnimatedSprite2D.animation == \"Atacar\":
 		attacking = false
 		$AnimatedSprite2D.offset.y = 0
+	
+	# Al terminar la animación de daño, devolvemos el control al jugador
+	if $AnimatedSprite2D.animation == \"Daño\":
+		recibiendo_daño = false
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
@@ -107,6 +147,14 @@ region = Rect2(160, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ek41f"]
 atlas = ExtResource("1_bwjto")
 region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khis8"]
+atlas = ExtResource("2_606se")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b88wv"]
+atlas = ExtResource("2_606se")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_urp6f"]
 atlas = ExtResource("1_ivps1")
@@ -223,6 +271,17 @@ animations = [{
 "loop": false,
 "name": &"Atacar",
 "speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khis8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b88wv")
+}],
+"loop": false,
+"name": &"Daño",
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -351,7 +410,9 @@ shape = SubResource("RectangleShape2D_q13i1")
 texture_filter = 1
 scale = Vector2(1, 0.96875)
 sprite_frames = SubResource("SpriteFrames_s7jk6")
-animation = &"Atacar"
+animation = &"Daño"
+frame = 1
+frame_progress = 1.0
 
 [node name="Jump3" type="AudioStreamPlayer2D" parent="." unique_id=1866972966]
 position = Vector2(11, 8)

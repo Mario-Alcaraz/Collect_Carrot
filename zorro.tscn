@@ -44,7 +44,6 @@ func _physics_process(delta):
 		else: 
 			velocity.y = 0
 		
-		# Si por error se queda quieto, le devolvemos su velocidad
 		if velocity.x == 0:
 			velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
 			
@@ -66,26 +65,26 @@ func procesar_patrulla():
 func _on_frame_changed():
 	if esta_muerto: return
 	if sprite.animation == \"Atacar\" and sprite.frame == 1:
-		for body in $AreaVista.get_overlapping_bodies():
-			if body.is_in_group(\"player\"):
-				Global.salud_actual -= 1
-				if Global.salud_actual <= 0:
-					get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
+		intentar_quitar_vida()
 
-# SEÑAL: ENTRA EL CONEJO
+# MODIFICADO SOLO EL INTERIOR
+func intentar_quitar_vida():
+	for body in $AreaVista.get_overlapping_bodies():
+		if body.is_in_group(\"player\"):
+			if body.has_method(\"recibir_daño\"):
+				body.recibir_daño() # Llama a la animación y resta vida
+
 func _on_area_vista_body_entered(body: Node2D) -> void:
 	if esta_muerto: return
 	if body.is_in_group(\"player\"):
 		esta_atacando = true
 		sprite.play(\"Atacar\")
 
-# SEÑAL: SALE EL CONEJO (Aquí está el arreglo)
 func _on_area_vista_body_exited(body: Node2D) -> void:
 	if esta_muerto: return
 	if body.is_in_group(\"player\"):
 		esta_atacando = false
 		sprite.play(\"Run\")
-		# Le devolvemos la velocidad de patrulla según hacia dónde mire
 		velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
 
 func _on_animated_sprite_2d_animation_finished():
@@ -94,7 +93,6 @@ func _on_animated_sprite_2d_animation_finished():
 		if comprobar_player_en_area():
 			sprite.play(\"Atacar\")
 		else:
-			# Doble seguridad: si termina la animación y no hay nadie, corre
 			esta_atacando = false
 			sprite.play(\"Run\")
 			velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
