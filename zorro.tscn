@@ -7,30 +7,41 @@
 [ext_resource type="Texture2D" uid="uid://c1nbg78ot18x8" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-3.png" id="3_cgncp"]
 [ext_resource type="Texture2D" uid="uid://c1jww1gv14ipj" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/crouch/player-crouch-2.png" id="3_jadge"]
 [ext_resource type="Texture2D" uid="uid://dst1nv2tpbtnp" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-4.png" id="4_dcv8m"]
+[ext_resource type="Texture2D" uid="uid://6cjyolwgiq2a" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/hurt/player-hurt-1.png" id="4_fdy37"]
+[ext_resource type="Texture2D" uid="uid://gl0t47psheuq" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/hurt/player-hurt-2.png" id="5_3ekvc"]
 [ext_resource type="Texture2D" uid="uid://5e134lkdj87s" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-5.png" id="5_iiiqj"]
+[ext_resource type="Texture2D" uid="uid://b0e88be8x2opg" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/Hurt2/hurt-2.png" id="6_02o3e"]
 [ext_resource type="Texture2D" uid="uid://dcinwnywafkab" path="res://Enemigos/Sunny Land Collection Files/Assets/Characters/Players/Foxy/Sprites/run/player-run-6.png" id="6_jadge"]
 
 [sub_resource type="GDScript" id="GDScript_yjs22"]
 script/source = "extends CharacterBody2D
 
-const CorrerZorro = 110 # Un poco más rápido para que sea difícil
-const Gravedad = 98
+const CorrerZorro = 110 
+const Gravedad = 600 
 @onready var ray_suelo: RayCast2D = $Floor
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 var esta_atacando = false
+var esta_muerto = false 
 
 func _ready():
 	velocity.x = CorrerZorro
 	sprite.play(\"Run\")
 
-func _physics_process(_delta):
+func _physics_process(delta):
+	if esta_muerto:
+		velocity.x = 0
+		if not is_on_floor(): velocity.y += Gravedad * delta
+		else: velocity.y = 0
+		move_and_slide()
+		return
+
 	if esta_atacando:
 		velocity.x = 0
 	else:
-		velocity.y += Gravedad
+		if not is_on_floor(): velocity.y += Gravedad * delta
+		else: velocity.y = 0
 		
-		# Girar sprite y raycast
 		if velocity.x < 0:
 			sprite.flip_h = true
 			ray_suelo.position.x = -8
@@ -38,26 +49,67 @@ func _physics_process(_delta):
 			sprite.flip_h = false
 			ray_suelo.position.x = 8
 
-		# Si llega a un borde o pared, se da la vuelta
 		if is_on_wall() or !ray_suelo.is_colliding():
 			velocity.x *= -1
 
 	move_and_slide()
 
-# Esta es la función que detecta al conejo antes de chocar físicamente
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group(\"player\") and not esta_atacando:
-		esta_atacando = true
-		sprite.play(\"Atacar\")
+# --- DETECCIÓN REPETITIVA ---
+func _on_area_vista_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\"):
+		atacar_en_bucle(body)
+
+func atacar_en_bucle(player):
+	# Mientras el jugador esté en el área y el zorro esté vivo...
+	while not esta_muerto and $AreaVista.overlaps_body(player):
+		# Comprobar si lo mira de cara
+		var diff_x = player.global_position.x - global_position.x
+		var mirando_al_jugador = (velocity.x > 0 and diff_x > 0) or (velocity.x < 0 and diff_x < 0)
 		
-		Global.salud_actual -= 1 # Quita medio corazón
-		
-		if Global.salud_actual <= 0:
-			get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
-		
-		await sprite.animation_finished
-		esta_atacando = false
-		sprite.play(\"Run\")
+		if mirando_al_jugador:
+			esta_atacando = true
+			
+			# 1. TIEMPO DE REACCIÓN (0.5s para que le pegues tú)
+			await get_tree().create_timer(0.5).timeout
+			
+			# 2. ATAQUE (Solo si no ha muerto en ese 0.5s)
+			if not esta_muerto:
+				sprite.play(\"Atacar\")
+				Global.salud_actual -= 1 # QUITA VIDA CADA VEZ
+				print(\"Vida restante: \", Global.salud_actual)
+				
+				if Global.salud_actual <= 0:
+					get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
+					break # Salir del bucle si muere el player
+				
+				await sprite.animation_finished
+				
+				# 3. PEQUEÑA PAUSA ANTES DEL SIGUIENTE ATAQUE
+				if not esta_muerto:
+					sprite.play(\"Run\")
+					esta_atacando = false
+					await get_tree().create_timer(0.8).timeout 
+		else:
+			# Si te pilla por la espalda, se gira o espera
+			await get_tree().create_timer(0.2).timeout
+			if esta_muerto: break
+
+	esta_atacando = false # Asegurar que vuelve a correr si sales del área
+
+func morir():
+	if esta_muerto: return
+	esta_muerto = true
+	esta_atacando = false 
+	
+	if has_node(\"AreaVista\"):
+		$AreaVista.set_deferred(\"monitoring\", false)
+	
+	set_collision_mask_value(1, false) 
+	sprite.play(\"Muerte\")
+
+func _on_animated_sprite_2d_animation_finished():
+	if sprite.animation == \"Muerte\":
+		sprite.play(\"Muerte1\")
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fdy37"]
@@ -70,6 +122,18 @@ region = Rect2(0, 0, 33, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_02o3e"]
 atlas = ExtResource("3_jadge")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hmbqp"]
+atlas = ExtResource("4_fdy37")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7kuf1"]
+atlas = ExtResource("5_3ekvc")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0ohq"]
+atlas = ExtResource("6_02o3e")
 region = Rect2(0, 0, 33, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fdy37"]
@@ -87,6 +151,25 @@ animations = [{
 "loop": true,
 "name": &"Atacar",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hmbqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7kuf1")
+}],
+"loop": true,
+"name": &"Muerte",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0ohq")
+}],
+"loop": true,
+"name": &"Muerte1",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -115,6 +198,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yjs22"]
 size = Vector2(23, 23)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdy37"]
+size = Vector2(30, 26)
+
 [node name="Zorro" type="CharacterBody2D" unique_id=1816901796]
 script = SubResource("GDScript_yjs22")
 
@@ -122,7 +208,6 @@ script = SubResource("GDScript_yjs22")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_fdy37")
 animation = &"Atacar"
-frame_progress = 0.5955158
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1774057759]
 position = Vector2(0.5, 4.5)
@@ -141,3 +226,11 @@ target_position = Vector2(-32, 0)
 [node name="Floor" type="RayCast2D" parent="." unique_id=734303203]
 position = Vector2(-11, -7)
 target_position = Vector2(0, 35)
+
+[node name="AreaVista" type="Area2D" parent="." unique_id=1034358767]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaVista" unique_id=2098718301]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_fdy37")
+
+[connection signal="body_entered" from="AreaVista" to="." method="_on_area_vista_body_entered"]
