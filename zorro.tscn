@@ -27,89 +27,93 @@ var esta_muerto = false
 func _ready():
 	velocity.x = CorrerZorro
 	sprite.play(\"Run\")
+	sprite.frame_changed.connect(_on_frame_changed)
 
 func _physics_process(delta):
 	if esta_muerto:
 		velocity.x = 0
 		if not is_on_floor(): velocity.y += Gravedad * delta
-		else: velocity.y = 0
 		move_and_slide()
 		return
 
 	if esta_atacando:
 		velocity.x = 0
 	else:
-		if not is_on_floor(): velocity.y += Gravedad * delta
-		else: velocity.y = 0
+		if not is_on_floor(): 
+			velocity.y += Gravedad * delta
+		else: 
+			velocity.y = 0
 		
-		if velocity.x < 0:
-			sprite.flip_h = true
-			ray_suelo.position.x = -8
-		elif velocity.x > 0:
-			sprite.flip_h = false
-			ray_suelo.position.x = 8
-
-		if is_on_wall() or !ray_suelo.is_colliding():
-			velocity.x *= -1
+		# Si por error se queda quieto, le devolvemos su velocidad
+		if velocity.x == 0:
+			velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
+			
+		procesar_patrulla()
 
 	move_and_slide()
 
-# --- DETECCIÓN REPETITIVA ---
-func _on_area_vista_body_entered(body: Node2D) -> void:
-	if body.is_in_group(\"player\"):
-		atacar_en_bucle(body)
+func procesar_patrulla():
+	if velocity.x < 0:
+		sprite.flip_h = true
+		ray_suelo.position.x = -8
+	elif velocity.x > 0:
+		sprite.flip_h = false
+		ray_suelo.position.x = 8
 
-func atacar_en_bucle(player):
-	# Mientras el jugador esté en el área y el zorro esté vivo...
-	while not esta_muerto and $AreaVista.overlaps_body(player):
-		# Comprobar si lo mira de cara
-		var diff_x = player.global_position.x - global_position.x
-		var mirando_al_jugador = (velocity.x > 0 and diff_x > 0) or (velocity.x < 0 and diff_x < 0)
-		
-		if mirando_al_jugador:
-			esta_atacando = true
-			
-			# 1. TIEMPO DE REACCIÓN (0.5s para que le pegues tú)
-			await get_tree().create_timer(0.5).timeout
-			
-			# 2. ATAQUE (Solo si no ha muerto en ese 0.5s)
-			if not esta_muerto:
-				sprite.play(\"Atacar\")
-				Global.salud_actual -= 1 # QUITA VIDA CADA VEZ
-				print(\"Vida restante: \", Global.salud_actual)
-				
+	if is_on_wall() or !ray_suelo.is_colliding():
+		velocity.x *= -1
+
+func _on_frame_changed():
+	if esta_muerto: return
+	if sprite.animation == \"Atacar\" and sprite.frame == 1:
+		for body in $AreaVista.get_overlapping_bodies():
+			if body.is_in_group(\"player\"):
+				Global.salud_actual -= 1
 				if Global.salud_actual <= 0:
 					get_tree().change_scene_to_file(\"res://menu_muerte.tscn\")
-					break # Salir del bucle si muere el player
-				
-				await sprite.animation_finished
-				
-				# 3. PEQUEÑA PAUSA ANTES DEL SIGUIENTE ATAQUE
-				if not esta_muerto:
-					sprite.play(\"Run\")
-					esta_atacando = false
-					await get_tree().create_timer(0.8).timeout 
-		else:
-			# Si te pilla por la espalda, se gira o espera
-			await get_tree().create_timer(0.2).timeout
-			if esta_muerto: break
 
-	esta_atacando = false # Asegurar que vuelve a correr si sales del área
+# SEÑAL: ENTRA EL CONEJO
+func _on_area_vista_body_entered(body: Node2D) -> void:
+	if esta_muerto: return
+	if body.is_in_group(\"player\"):
+		esta_atacando = true
+		sprite.play(\"Atacar\")
+
+# SEÑAL: SALE EL CONEJO (Aquí está el arreglo)
+func _on_area_vista_body_exited(body: Node2D) -> void:
+	if esta_muerto: return
+	if body.is_in_group(\"player\"):
+		esta_atacando = false
+		sprite.play(\"Run\")
+		# Le devolvemos la velocidad de patrulla según hacia dónde mire
+		velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
+
+func _on_animated_sprite_2d_animation_finished():
+	if esta_muerto: return
+	if sprite.animation == \"Atacar\":
+		if comprobar_player_en_area():
+			sprite.play(\"Atacar\")
+		else:
+			# Doble seguridad: si termina la animación y no hay nadie, corre
+			esta_atacando = false
+			sprite.play(\"Run\")
+			velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
+	elif sprite.animation == \"Muerte\":
+		sprite.play(\"Muerte1\")
+
+func comprobar_player_en_area() -> bool:
+	for b in $AreaVista.get_overlapping_bodies():
+		if b.is_in_group(\"player\"): return true
+	return false
 
 func morir():
 	if esta_muerto: return
 	esta_muerto = true
-	esta_atacando = false 
-	
+	esta_atacando = false
 	if has_node(\"AreaVista\"):
 		$AreaVista.set_deferred(\"monitoring\", false)
-	
 	set_collision_mask_value(1, false) 
 	sprite.play(\"Muerte\")
-
-func _on_animated_sprite_2d_animation_finished():
-	if sprite.animation == \"Muerte\":
-		sprite.play(\"Muerte1\")
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fdy37"]
@@ -150,7 +154,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Atacar",
-"speed": 12.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -234,3 +238,4 @@ position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_fdy37")
 
 [connection signal="body_entered" from="AreaVista" to="." method="_on_area_vista_body_entered"]
+[connection signal="body_exited" from="AreaVista" to="." method="_on_area_vista_body_exited"]
