@@ -24,10 +24,20 @@ const Gravedad = 600
 var esta_atacando = false
 var esta_muerto = false 
 
+# --- AÑADIDO: Lógica de tiempo entre ataques ---
+var puede_atacar_nuevamente = true
+@onready var timer_cooldown = Timer.new()
+
 func _ready():
 	velocity.x = CorrerZorro
 	sprite.play(\"Run\")
 	sprite.frame_changed.connect(_on_frame_changed)
+	
+	# AÑADIDO: Configuración del Timer
+	add_child(timer_cooldown)
+	timer_cooldown.wait_time = 1.2 # Tiempo de espera entre ataques
+	timer_cooldown.one_shot = true
+	timer_cooldown.timeout.connect(func(): puede_atacar_nuevamente = true)
 
 func _physics_process(delta):
 	if esta_muerto:
@@ -67,12 +77,17 @@ func _on_frame_changed():
 	if sprite.animation == \"Atacar\" and sprite.frame == 1:
 		intentar_quitar_vida()
 
-# MODIFICADO SOLO EL INTERIOR
 func intentar_quitar_vida():
+	# AÑADIDO: Comprobamos el tiempo de espera
+	if not puede_atacar_nuevamente: return
+	
 	for body in $AreaVista.get_overlapping_bodies():
 		if body.is_in_group(\"player\"):
-			if body.has_method(\"recibir_daño\"):
-				body.recibir_daño() # Llama a la animación y resta vida
+			# AÑADIDO: Ahora restamos la vida al Global
+			# El Global se encargará de llamar a body.recibir_daño() automáticamente
+			Global.salud_actual -= 1
+			puede_atacar_nuevamente = false
+			timer_cooldown.start()
 
 func _on_area_vista_body_entered(body: Node2D) -> void:
 	if esta_muerto: return

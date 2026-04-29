@@ -1,35 +1,189 @@
 [gd_scene format=3 uid="uid://8cunxeuxyn5e"]
 
 [ext_resource type="Texture2D" uid="uid://sjopqcrr1mic" path="res://Monsters_Creatures_Fantasy/Monsters_Creatures_Fantasy/Goblin/Run.png" id="1_dl46o"]
+[ext_resource type="Texture2D" uid="uid://cirmnyvr2ialo" path="res://Monsters_Creatures_Fantasy/Monsters_Creatures_Fantasy/Goblin/Attack.png" id="1_u6mjv"]
+[ext_resource type="Texture2D" uid="uid://cs3mfyt021n5q" path="res://Monsters_Creatures_Fantasy/Monsters_Creatures_Fantasy/Goblin/Death.png" id="2_vu5tg"]
 
 [sub_resource type="GDScript" id="GDScript_yjs22"]
 script/source = "extends CharacterBody2D
 
-const CorrerZorro = 90
-const Gravedad = 98
+# --- CONSTANTES ---
+const CorrerZorro = 110 
+const Gravedad = 600 
+
 @onready var ray_suelo: RayCast2D = $Floor
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var area_vista: Area2D = $AreaVista
+
+var esta_atacando = false
+var esta_muerto = false 
+var puede_quitar_vida = true
+
+# --- TIMERS ---
+@onready var timer_espera_ataque = Timer.new()
+@onready var timer_cooldown = Timer.new()
 
 func _ready():
+	add_to_group(\"enemigos\")
 	velocity.x = CorrerZorro
-	$AnimatedSprite2D.play(\"Run\")
-
-func _physics_process(_delta):
-	velocity.y += Gravedad
+	sprite.play(\"Run\")
 	
-	# Ajustar dirección del sprite
-	if velocity.x < 0:
-		sprite.flip_h = true
-		ray_suelo.position.x = -8
-	elif velocity.x > 0:
-		sprite.flip_h = false
-		ray_suelo.position.x = 8
+	# AJUSTE MANUAL DEL ÁREA: Si el círculo azul es muy grande, no puedes acercarte.
+	# Aquí forzamos un radio pequeño (35-40 píxeles)
+	var colision_v = $AreaVista/CollisionShape2D
+	if colision_v.shape is CircleShape2D:
+		colision_v.shape.radius = 38 
 
+	sprite.frame_changed.connect(_on_frame_changed)
+	
+	add_child(timer_espera_ataque)
+	timer_espera_ataque.wait_time = 1.0 # 1 SEGUNDO DE MARGEN
+	timer_espera_ataque.one_shot = true
+	timer_espera_ataque.timeout.connect(_lanzar_ataque_final)
+	
+	add_child(timer_cooldown)
+	timer_cooldown.wait_time = 1.5 # Más tiempo entre ataques para facilitar el juego
+	timer_cooldown.one_shot = true
+	timer_cooldown.timeout.connect(func(): puede_quitar_vida = true)
+
+func _physics_process(delta):
+	if esta_muerto:
+		velocity.x = 0
+		if not is_on_floor(): velocity.y += Gravedad * delta
+		move_and_slide()
+		return
+
+	if esta_atacando:
+		velocity.x = 0
+	else:
+		if not is_on_floor(): velocity.y += Gravedad * delta
+		else: velocity.y = 0
+		
+		if velocity.x == 0:
+			velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
+		procesar_patrulla()
+
+	move_and_slide()
+
+func procesar_patrulla():
+	sprite.flip_h = (velocity.x < 0)
+	ray_suelo.position.x = -8 if sprite.flip_h else 8
 	if is_on_wall() or !ray_suelo.is_colliding():
 		velocity.x *= -1
 
-	move_and_slide()
+# --- LÓGICA DE COMBATE ---
+
+func _on_area_vista_body_entered(body: Node2D) -> void:
+	if esta_muerto: return
+	if body.is_in_group(\"player\"):
+		esta_atacando = true
+		sprite.play(\"Idle\") # Se para en seco
+		timer_espera_ataque.start() # Te da 1 segundo para matarlo
+
+func _lanzar_ataque_final():
+	if esta_muerto or !esta_atacando: return
+	sprite.play(\"Atacar\") # Suelta el tajo
+
+func _on_frame_changed():
+	if esta_muerto: return
+	# CAMBIO CLAVE: Si el Frame 1 es muy rápido, usa el Frame 2 o 3.
+	# Esto hace que el daño \"concuerde\" con el final del tajo.
+	if sprite.animation == \"Atacar\" and sprite.frame == 2: 
+		intentar_quitar_vida()
+
+func intentar_quitar_vida():
+	if not puede_quitar_vida: return
+	for body in area_vista.get_overlapping_bodies():
+		if body.is_in_group(\"player\"):
+			Global.salud_actual -= 1
+			puede_quitar_vida = false
+			timer_cooldown.start()
+			break
+
+func _on_area_vista_body_exited(body: Node2D) -> void:
+	if esta_muerto: return
+	if body.is_in_group(\"player\"):
+		esta_atacando = false
+		timer_espera_ataque.stop()
+		sprite.play(\"Run\")
+		velocity.x = CorrerZorro * (-1 if sprite.flip_h else 1)
+
+func _on_animated_sprite_2d_animation_finished():
+	if esta_muerto: return
+	if sprite.animation == \"Atacar\":
+		if comprobar_player_en_area():
+			# Después del primer tajo, espera un poco más antes de otro
+			sprite.play(\"Idle\")
+			timer_espera_ataque.start() 
+		else:
+			esta_atacando = false
+			sprite.play(\"Run\")
+	elif sprite.animation == \"Muerte\":
+		queue_free()
+
+func comprobar_player_en_area() -> bool:
+	for b in area_vista.get_overlapping_bodies():
+		if b.is_in_group(\"player\"): return true
+	return false
+
+func morir():
+	if esta_muerto: return
+	esta_muerto = true
+	esta_atacando = false
+	timer_espera_ataque.stop()
+	set_collision_layer_value(1, false)
+	set_collision_mask_value(1, false)
+	area_vista.set_deferred(\"monitoring\", false)
+	sprite.play(\"Muerte\")
 "
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mq4fs"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7r1m"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3x2od"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gut4f"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vqqyg"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lon5w"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(750, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqvpw"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(900, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sm8he"]
+atlas = ExtResource("1_u6mjv")
+region = Rect2(1050, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8m2n1"]
+atlas = ExtResource("2_vu5tg")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crhns"]
+atlas = ExtResource("2_vu5tg")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqkea"]
+atlas = ExtResource("2_vu5tg")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opsqu"]
+atlas = ExtResource("2_vu5tg")
+region = Rect2(450, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u6mjv"]
 atlas = ExtResource("1_dl46o")
@@ -67,6 +221,52 @@ region = Rect2(1050, 0, 150, 150)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_mq4fs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7r1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3x2od")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gut4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vqqyg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lon5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lqvpw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sm8he")
+}],
+"loop": false,
+"name": &"Atacar",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8m2n1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crhns")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rqkea")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opsqu")
+}],
+"loop": false,
+"name": &"Muerte",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_u6mjv")
 }, {
 "duration": 1.0,
@@ -98,6 +298,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yjs22"]
 size = Vector2(38, 38)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_vu5tg"]
+radius = 33.0
+
 [node name="Goblin" type="CharacterBody2D" unique_id=1816901796]
 script = SubResource("GDScript_yjs22")
 
@@ -105,8 +308,9 @@ script = SubResource("GDScript_yjs22")
 texture_filter = 1
 position = Vector2(0, 1)
 sprite_frames = SubResource("SpriteFrames_fdy37")
-animation = &"Run"
-frame_progress = 0.18187144
+animation = &"Atacar"
+frame = 7
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1774057759]
 position = Vector2(0, 7)
@@ -125,3 +329,13 @@ target_position = Vector2(-51, 0)
 [node name="Floor" type="RayCast2D" parent="." unique_id=734303203]
 position = Vector2(-11, -7)
 target_position = Vector2(0, 55)
+
+[node name="AreaVista" type="Area2D" parent="." unique_id=1359313594]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaVista" unique_id=1830605484]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_vu5tg")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="AreaVista" to="." method="_on_area_vista_body_entered"]
+[connection signal="body_exited" from="AreaVista" to="." method="_on_area_vista_body_exited"]

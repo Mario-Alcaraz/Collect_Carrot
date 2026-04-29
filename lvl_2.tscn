@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://8cunxeuxyn5e" path="res://goblin.tscn" id="4_l31ol"]
 [ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="6_7rxco"]
 [ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="7_f7f4c"]
+[ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="8_f7f4c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dbx23"]
 texture = ExtResource("1_dbx23")
@@ -1477,6 +1478,8 @@ shape = SubResource("RectangleShape2D_tmnqu")
 position = Vector2(270, 16)
 
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_f7f4c")]
+
+[node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("8_f7f4c")]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]
