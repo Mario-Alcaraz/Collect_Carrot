@@ -1452,6 +1452,30 @@ shape = SubResource("RectangleShape2D_feb5d")
 [node name="Area2D6" parent="." unique_id=80993008 instance=ExtResource("6_t6wp4")]
 position = Vector2(292, 10)
 
+[node name="Area2D6" parent="Area2D6" unique_id=1286530907 instance=ExtResource("6_t6wp4")]
+position = Vector2(241, -40)
+
+[node name="Area2D6" parent="Area2D6/Area2D6" unique_id=1930382478 instance=ExtResource("6_t6wp4")]
+position = Vector2(225, -5)
+
+[node name="Area2D6" parent="Area2D6/Area2D6/Area2D6" unique_id=1494812644 instance=ExtResource("6_t6wp4")]
+position = Vector2(684, -26)
+
+[node name="Area2D6" parent="Area2D6/Area2D6/Area2D6/Area2D6" unique_id=1293076539 instance=ExtResource("6_t6wp4")]
+position = Vector2(157, -7)
+
+[node name="Area2D" parent="Area2D6/Area2D6/Area2D6" unique_id=779643744 instance=ExtResource("6_t6wp4")]
+position = Vector2(-238, 0)
+
+[node name="Area2D2" parent="Area2D6/Area2D6/Area2D6" unique_id=1901268547 instance=ExtResource("6_t6wp4")]
+position = Vector2(-14, -2)
+
+[node name="Area2D3" parent="Area2D6/Area2D6/Area2D6" unique_id=1260817631 instance=ExtResource("6_t6wp4")]
+position = Vector2(665, -28)
+
+[node name="Area2D4" parent="Area2D6/Area2D6/Area2D6" unique_id=2116715702 instance=ExtResource("6_t6wp4")]
+position = Vector2(821, -36)
+
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_bcbm8")]
 
 [node name="HUD2" parent="." unique_id=1368322046 instance=ExtResource("7_bcbm8")]
