@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://be4agm8ylsaba" path="res://player.tscn" id="3_6ntf1"]
 [ext_resource type="AudioStream" uid="uid://xk5ah174gm81" path="res://Musica/level4.wav" id="4_o7vtu"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="5_kr7kd"]
+[ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="6_o7vtu"]
+[ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="7_emw0k"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_feb5d"]
 texture = ExtResource("2_kr7kd")
@@ -1547,6 +1549,10 @@ position = Vector2(444, 37)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D14" unique_id=1848011129]
 position = Vector2(12, 3)
 shape = SubResource("RectangleShape2D_d7q7f")
+
+[node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("6_o7vtu")]
+
+[node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_emw0k")]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]

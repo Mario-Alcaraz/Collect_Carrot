@@ -6,6 +6,8 @@
 [ext_resource type="AudioStream" uid="uid://xk5ah174gm81" path="res://Musica/level4.wav" id="4_33ycm"]
 [ext_resource type="PackedScene" uid="uid://8cunxeuxyn5e" path="res://goblin.tscn" id="5_yfixo"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="6_3p4g5"]
+[ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="7_mv8lu"]
+[ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="8_43e0g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_feb5d"]
 texture = ExtResource("2_yfixo")
@@ -1420,7 +1422,8 @@ tile_set = SubResource("TileSet_fc0e3")
 
 [node name="CharacterBody2D" parent="." unique_id=186745563 instance=ExtResource("3_3p4g5")]
 texture_filter = 1
-position = Vector2(1402, -206)
+position = Vector2(219, 14)
+scale = Vector2(1, 1.0772791)
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=829018992]
 position = Vector2(68, -21)
@@ -1531,3 +1534,7 @@ position = Vector2(1705, -20)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D12" unique_id=54503078]
 position = Vector2(-8.5, -0.5)
 shape = SubResource("RectangleShape2D_yqkdm")
+
+[node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("7_mv8lu")]
+
+[node name="HUD" parent="." unique_id=176770981 instance=ExtResource("8_43e0g")]
