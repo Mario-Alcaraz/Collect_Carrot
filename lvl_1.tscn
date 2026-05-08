@@ -1449,36 +1449,42 @@ position = Vector2(395, 37)
 position = Vector2(37, 4)
 shape = SubResource("RectangleShape2D_feb5d")
 
-[node name="Area2D6" parent="." unique_id=80993008 instance=ExtResource("6_t6wp4")]
-position = Vector2(292, 10)
-
-[node name="Area2D6" parent="Area2D6" unique_id=1286530907 instance=ExtResource("6_t6wp4")]
-position = Vector2(241, -40)
-
-[node name="Area2D6" parent="Area2D6/Area2D6" unique_id=1930382478 instance=ExtResource("6_t6wp4")]
-position = Vector2(225, -5)
-
-[node name="Area2D6" parent="Area2D6/Area2D6/Area2D6" unique_id=1494812644 instance=ExtResource("6_t6wp4")]
-position = Vector2(684, -26)
-
-[node name="Area2D6" parent="Area2D6/Area2D6/Area2D6/Area2D6" unique_id=1293076539 instance=ExtResource("6_t6wp4")]
-position = Vector2(157, -7)
-
-[node name="Area2D" parent="Area2D6/Area2D6/Area2D6" unique_id=779643744 instance=ExtResource("6_t6wp4")]
-position = Vector2(-238, 0)
-
-[node name="Area2D2" parent="Area2D6/Area2D6/Area2D6" unique_id=1901268547 instance=ExtResource("6_t6wp4")]
-position = Vector2(-14, -2)
-
-[node name="Area2D3" parent="Area2D6/Area2D6/Area2D6" unique_id=1260817631 instance=ExtResource("6_t6wp4")]
-position = Vector2(665, -28)
-
-[node name="Area2D4" parent="Area2D6/Area2D6/Area2D6" unique_id=2116715702 instance=ExtResource("6_t6wp4")]
-position = Vector2(821, -36)
-
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_bcbm8")]
 
 [node name="HUD2" parent="." unique_id=1368322046 instance=ExtResource("7_bcbm8")]
+
+[node name="ContenedorZanahorias" type="Node2D" parent="." unique_id=1887329480]
+z_index = 2
+
+[node name="Area2D6" parent="ContenedorZanahorias" unique_id=80993008 instance=ExtResource("6_t6wp4")]
+position = Vector2(1331, -30)
+
+[node name="Area2D7" parent="ContenedorZanahorias" unique_id=584711427 instance=ExtResource("6_t6wp4")]
+position = Vector2(504, -41)
+
+[node name="Area2D8" parent="ContenedorZanahorias" unique_id=1160495692 instance=ExtResource("6_t6wp4")]
+position = Vector2(721, -33)
+
+[node name="Area2D9" parent="ContenedorZanahorias" unique_id=1435148777 instance=ExtResource("6_t6wp4")]
+position = Vector2(871, -70)
+
+[node name="Area2D10" parent="ContenedorZanahorias" unique_id=1439546731 instance=ExtResource("6_t6wp4")]
+position = Vector2(973, -71)
+
+[node name="Area2D11" parent="ContenedorZanahorias" unique_id=2010003059 instance=ExtResource("6_t6wp4")]
+position = Vector2(1503, -93)
+
+[node name="Area2D12" parent="ContenedorZanahorias" unique_id=1866910074 instance=ExtResource("6_t6wp4")]
+position = Vector2(1586, -32)
+
+[node name="Area2D13" parent="ContenedorZanahorias" unique_id=2051601258 instance=ExtResource("6_t6wp4")]
+position = Vector2(1681, -93)
+
+[node name="Area2D14" parent="ContenedorZanahorias" unique_id=85834893 instance=ExtResource("6_t6wp4")]
+position = Vector2(1808, -42)
+
+[node name="Area2D15" parent="ContenedorZanahorias" unique_id=1929688711 instance=ExtResource("6_t6wp4")]
+position = Vector2(300, 17)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]

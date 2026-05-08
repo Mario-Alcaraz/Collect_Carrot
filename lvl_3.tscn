@@ -1414,6 +1414,7 @@ size = Vector2(46, 8)
 size = Vector2(45, 14)
 
 [node name="Game" type="Node2D" unique_id=2021419277]
+position = Vector2(1, 0)
 script = ExtResource("1_dnxd7")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=923996054]
