@@ -1474,12 +1474,42 @@ position = Vector2(2266, 21)
 position = Vector2(6, 3)
 shape = SubResource("RectangleShape2D_tmnqu")
 
-[node name="Area2D9" parent="." unique_id=80993008 instance=ExtResource("6_7rxco")]
-position = Vector2(270, 16)
-
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("7_f7f4c")]
 
 [node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("8_f7f4c")]
+
+[node name="ContenedorZanahorias2" type="Node2D" parent="." unique_id=163187976]
+z_index = 2
+
+[node name="Area2D9" parent="ContenedorZanahorias2" unique_id=80993008 instance=ExtResource("6_7rxco")]
+position = Vector2(354, -7)
+
+[node name="Area2D10" parent="ContenedorZanahorias2" unique_id=948666877 instance=ExtResource("6_7rxco")]
+position = Vector2(2071, -104)
+
+[node name="Area2D11" parent="ContenedorZanahorias2" unique_id=657890261 instance=ExtResource("6_7rxco")]
+position = Vector2(601, -229)
+
+[node name="Area2D12" parent="ContenedorZanahorias2" unique_id=174523103 instance=ExtResource("6_7rxco")]
+position = Vector2(318, -53)
+
+[node name="Area2D13" parent="ContenedorZanahorias2" unique_id=1493003480 instance=ExtResource("6_7rxco")]
+position = Vector2(1830, -115)
+
+[node name="Area2D14" parent="ContenedorZanahorias2" unique_id=1514243608 instance=ExtResource("6_7rxco")]
+position = Vector2(938, -12)
+
+[node name="Area2D15" parent="ContenedorZanahorias2" unique_id=1940616860 instance=ExtResource("6_7rxco")]
+position = Vector2(1510, -146)
+
+[node name="Area2D16" parent="ContenedorZanahorias2" unique_id=536671783 instance=ExtResource("6_7rxco")]
+position = Vector2(418, -39)
+
+[node name="Area2D17" parent="ContenedorZanahorias2" unique_id=255798922 instance=ExtResource("6_7rxco")]
+position = Vector2(1507, -210)
+
+[node name="Area2D18" parent="ContenedorZanahorias2" unique_id=1627615482 instance=ExtResource("6_7rxco")]
+position = Vector2(749, -77)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]

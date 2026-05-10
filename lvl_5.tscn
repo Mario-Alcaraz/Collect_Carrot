@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="6_3p4g5"]
 [ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="7_mv8lu"]
 [ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="8_43e0g"]
+[ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="9_43e0g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_feb5d"]
 texture = ExtResource("2_yfixo")
@@ -1538,3 +1539,38 @@ shape = SubResource("RectangleShape2D_yqkdm")
 [node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("7_mv8lu")]
 
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("8_43e0g")]
+
+[node name="ContenedorZanahorias5" type="Node2D" parent="." unique_id=2088985670]
+z_index = 2
+
+[node name="Area2D" parent="ContenedorZanahorias5" unique_id=80993008 instance=ExtResource("9_43e0g")]
+position = Vector2(492, -27)
+
+[node name="Area2D2" parent="ContenedorZanahorias5" unique_id=768058049 instance=ExtResource("9_43e0g")]
+position = Vector2(1348, -210)
+
+[node name="Area2D3" parent="ContenedorZanahorias5" unique_id=1258274665 instance=ExtResource("9_43e0g")]
+position = Vector2(896, -234)
+
+[node name="Area2D4" parent="ContenedorZanahorias5" unique_id=251411064 instance=ExtResource("9_43e0g")]
+position = Vector2(1190, -127)
+
+[node name="Area2D5" parent="ContenedorZanahorias5" unique_id=777352039 instance=ExtResource("9_43e0g")]
+position = Vector2(960, 2)
+
+[node name="Area2D6" parent="ContenedorZanahorias5" unique_id=1614537979 instance=ExtResource("9_43e0g")]
+position = Vector2(1064, 46)
+
+[node name="Area2D7" parent="ContenedorZanahorias5" unique_id=159329541 instance=ExtResource("9_43e0g")]
+position = Vector2(1633, -342)
+
+[node name="Area2D8" parent="ContenedorZanahorias5" unique_id=1594417950 instance=ExtResource("9_43e0g")]
+position = Vector2(738, 131)
+
+[node name="Area2D9" parent="ContenedorZanahorias5" unique_id=596059376 instance=ExtResource("9_43e0g")]
+position = Vector2(730, -64)
+
+[node name="Area2D10" parent="ContenedorZanahorias5" unique_id=407987267 instance=ExtResource("9_43e0g")]
+position = Vector2(568, -71)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

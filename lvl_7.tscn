@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="4_31kc1"]
 [ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="5_tfswh"]
 [ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="6_31kc1"]
+[ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="7_31kc1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qlg1n"]
 texture = ExtResource("1_b75pu")
@@ -1551,3 +1552,35 @@ shape = SubResource("RectangleShape2D_jr53h")
 [node name="HUD_Vidas" parent="." unique_id=53302477 instance=ExtResource("5_tfswh")]
 
 [node name="HUD" parent="." unique_id=176770981 instance=ExtResource("6_31kc1")]
+
+[node name="ContenedorZanahorias7" type="Node2D" parent="." unique_id=1533402214]
+
+[node name="Area2D" parent="ContenedorZanahorias7" unique_id=80993008 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D2" parent="ContenedorZanahorias7" unique_id=1523736600 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D3" parent="ContenedorZanahorias7" unique_id=1845863747 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D4" parent="ContenedorZanahorias7" unique_id=682157986 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D5" parent="ContenedorZanahorias7" unique_id=1113618854 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D6" parent="ContenedorZanahorias7" unique_id=415922716 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D7" parent="ContenedorZanahorias7" unique_id=150841336 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D8" parent="ContenedorZanahorias7" unique_id=1274906299 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D9" parent="ContenedorZanahorias7" unique_id=1190754561 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
+
+[node name="Area2D10" parent="ContenedorZanahorias7" unique_id=823649074 instance=ExtResource("7_31kc1")]
+position = Vector2(341, 19)
