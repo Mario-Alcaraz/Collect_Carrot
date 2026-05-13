@@ -3,7 +3,7 @@ extends Node2D
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		# Vuelve al inicio o pantalla final
-		get_tree().change_scene_to_file("res://lvl_9.tscn")
+		get_tree().change_scene_to_file("res://lvl_8.tscn")
 
 
 
@@ -27,10 +27,3 @@ func _on_area_2d_11_body_entered(body): quitar_vida(body)
 func _on_area_2d_12_body_entered(body): quitar_vida(body)
 func _on_area_2d_13_body_entered(body): quitar_vida(body)
 func _on_area_2d_14_body_entered(body): quitar_vida(body)
-func _on_area_2d_15_body_entered(body): quitar_vida(body)
-func _on_area_2d_16_body_entered(body): quitar_vida(body)
-func _on_area_2d_17_body_entered(body): quitar_vida(body)
-func _on_area_2d_18_body_entered(body): quitar_vida(body)
-func _on_area_2d_19_body_entered(body): quitar_vida(body)
-func _on_area_2d_20_body_entered(body): quitar_vida(body)
-func _on_area_2d_21_body_entered(body): quitar_vida(body)
