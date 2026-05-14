@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bpcer6yxvjd4w" path="res://lvl_5.gd" id="1_3p4g5"]
 [ext_resource type="Texture2D" uid="uid://bm8j1qy0sbenj" path="res://Nature_environment_01.png" id="2_yfixo"]
 [ext_resource type="PackedScene" uid="uid://be4agm8ylsaba" path="res://player.tscn" id="3_3p4g5"]
-[ext_resource type="AudioStream" uid="uid://xk5ah174gm81" path="res://Musica/level4.wav" id="4_33ycm"]
+[ext_resource type="AudioStream" uid="uid://cbnkrylv8jg1y" path="res://Musica/level5.wav" id="4_43e0g"]
 [ext_resource type="PackedScene" uid="uid://8cunxeuxyn5e" path="res://goblin.tscn" id="5_yfixo"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="6_3p4g5"]
 [ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="7_mv8lu"]
@@ -1448,9 +1448,9 @@ scale = Vector2(1, 1.0772791)
 position = Vector2(68, -21)
 zoom = Vector2(4, 4)
 
-[node name="Level4" type="AudioStreamPlayer2D" parent="." unique_id=77673967]
+[node name="Level5" type="AudioStreamPlayer2D" parent="." unique_id=77673967]
 position = Vector2(1288, -100)
-stream = ExtResource("4_33ycm")
+stream = ExtResource("4_43e0g")
 autoplay = true
 max_distance = 100000.0
 
