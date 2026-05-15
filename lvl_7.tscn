@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://bm8j1qy0sbenj" path="res://Nature_environment_01.png" id="1_b75pu"]
 [ext_resource type="Script" uid="uid://coy2w04q16wbk" path="res://lvl_7.gd" id="1_qlg1n"]
 [ext_resource type="PackedScene" uid="uid://be4agm8ylsaba" path="res://player.tscn" id="2_d46p4"]
-[ext_resource type="AudioStream" uid="uid://xk5ah174gm81" path="res://Musica/level4.wav" id="3_tfswh"]
 [ext_resource type="PackedScene" uid="uid://db73u2b3okc20" path="res://zorro.tscn" id="4_31kc1"]
+[ext_resource type="AudioStream" uid="uid://b4xqhqqmrs6qc" path="res://Musica/level7.wav" id="4_qlg1n"]
 [ext_resource type="PackedScene" uid="uid://cbx2wxe3oy1ua" path="res://hud_vidas.tscn" id="5_tfswh"]
 [ext_resource type="PackedScene" uid="uid://b3h7clvluhdb7" path="res://hud.tscn" id="6_31kc1"]
 [ext_resource type="PackedScene" uid="uid://bbriwnycdbh78" path="res://Zanahoria.tscn" id="7_31kc1"]
@@ -1440,9 +1440,9 @@ position = Vector2(226, 20)
 position = Vector2(68, -21)
 zoom = Vector2(4, 4)
 
-[node name="Level4" type="AudioStreamPlayer2D" parent="." unique_id=1381363110]
+[node name="Level7" type="AudioStreamPlayer2D" parent="." unique_id=1381363110]
 position = Vector2(1288, -100)
-stream = ExtResource("3_tfswh")
+stream = ExtResource("4_qlg1n")
 autoplay = true
 max_distance = 100000.0
 
@@ -1557,31 +1557,31 @@ shape = SubResource("RectangleShape2D_jr53h")
 position = Vector2(341, 19)
 
 [node name="Area2D2" parent="ContenedorZanahorias7" unique_id=1523736600 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(656, -25)
 
 [node name="Area2D3" parent="ContenedorZanahorias7" unique_id=1845863747 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(894, -26)
 
 [node name="Area2D4" parent="ContenedorZanahorias7" unique_id=682157986 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1098, -28)
 
 [node name="Area2D5" parent="ContenedorZanahorias7" unique_id=1113618854 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1195, -28)
 
 [node name="Area2D6" parent="ContenedorZanahorias7" unique_id=415922716 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1380, -26)
 
 [node name="Area2D7" parent="ContenedorZanahorias7" unique_id=150841336 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1532, -27)
 
 [node name="Area2D8" parent="ContenedorZanahorias7" unique_id=1274906299 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1727, -27)
 
 [node name="Area2D9" parent="ContenedorZanahorias7" unique_id=1190754561 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1858, -26)
 
 [node name="Area2D10" parent="ContenedorZanahorias7" unique_id=823649074 instance=ExtResource("7_31kc1")]
-position = Vector2(341, 19)
+position = Vector2(1988, -26)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D2" to="." method="_on_area_2d_2_body_entered"]
