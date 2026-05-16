@@ -47,7 +47,6 @@ flat = true
 [node name="Menu" type="AudioStreamPlayer2D" parent="." unique_id=344441518]
 position = Vector2(953, 411)
 stream = ExtResource("3_tyo0u")
-autoplay = true
 
 [connection signal="pressed" from="TextureRect/VBoxContainer/Continuar" to="." method="_on_continuar_pressed"]
 [connection signal="pressed" from="TextureRect/VBoxContainer/Reiniciar" to="." method="_on_reiniciar_pressed"]

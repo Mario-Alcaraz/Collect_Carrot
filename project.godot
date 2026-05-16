@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*uid://4376600qm74s"
+MenuPausa="*uid://cgbmq7kwxnc5g"
 
 [display]
 
